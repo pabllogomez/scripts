@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#
+
 # 1_CriarServidor.sh - Busca o nome completo de um usuário no Unix
 #
 # Autor     : Pabllo Moura <>
