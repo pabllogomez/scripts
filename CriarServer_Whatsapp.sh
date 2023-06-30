@@ -17,29 +17,29 @@ read -p "Digite a porta PM2 do backend: " porta_back
 read -p "Digite a porta PM2 do frontend: " porta_front
 read -p "Digite a senha do banco de dados: " senha_db
 
-#Criar diretorio do novo Cliente e mudar o dono do diretorio para root.
-echo "Criando o diretorio do novo Cliente"
+#Criar diretório do novo Cliente e mudar o dono do diretório para root.
+echo "Criando o diretório do novo Cliente"
 
-mkdir /www/wwwroot/$name
-chown -R root /www/wwwroot/$name
+mkdir /www/wwwroot/"$name"
+chown -R root /www/wwwroot/"$name"
     
-mkdir /www/wwwroot/$name/frontend
-chown -R root /www/wwwroot/$name/frontend
-mkdir /www/wwwroot/$name/backend
-chown -R root /www/wwwroot/$name/backend
+mkdir /www/wwwroot/"$name"/frontend
+chown -R root /www/wwwroot/"$name"/frontend
+mkdir /www/wwwroot/"$name"/backend
+chown -R root /www/wwwroot/"$name"/backend
 
-echo "Diretorio Criado"
+echo "Diretório Criado"
 
 #Copiando os arquivos padrão para para do novo cliente.
 echo "Copiando os arquivos primários"
 
-cp -r /www/wwwroot/PROJETOPADRAO/PADRAO/netchat-base/* /www/wwwroot/$name/
+cp -r /www/wwwroot/PROJETOPADRAO/PADRAO/netchat-base/* /www/wwwroot/"$name"/
 
-cd /www/wwwroot/$name/ || exit
+cd /www/wwwroot/"$name"/ || exit
 
 echo "Cópia Finalizada"
 
-#Executando o script Creat.sh
+#Executando o script Create.sh
 
 echo "Configurando tudo para você, favor aguarde."
 
@@ -55,19 +55,19 @@ npm run build -ws
 echo "Configurando tudo para você, favor aguarde..."
 
 # Configura o arquivo .env
-sudo tee /www/wwwroot/$name/backend/.env <<EOF
+sudo tee /www/wwwroot/"$name"/backend/.env <<EOF
 
 NODE_ENV=production
-BACKEND_URL=https://api$name.$url
-FRONTEND_URL=https://$name.$url
+BACKEND_URL=https://api"$name".$url
+FRONTEND_URL=https://"$name".$url
 PROXY_PORT=443
 PORT=$porta_back
 
 DB_DIALECT=mysql
 DB_HOST=127.0.0.1
-DB_USER=$name
+DB_USER="$name"
 DB_PASS=$senha_db
-DB_NAME=$name
+DB_NAME="$name"
 
 USER_LIMIT=300
 CONNECTIONS_LIMIT=3
@@ -77,9 +77,9 @@ JWT_REFRESH_SECRET=devrefreshsecret
 
 EOF
 
-sudo tee /www/wwwroot/$name/frontend/.env <<EOF
+sudo tee /www/wwwroot/"$name"/frontend/.env <<EOF
 
-REACT_APP_BACKEND_URL=https://api$name.$url
+REACT_APP_BACKEND_URL=https://api"$name".$url
 REACT_APP_HOURS_CLOSE_TICKETS_AUTO=
 PORT=$porta_front
 REACT_APP_LOGO=$logo
@@ -99,12 +99,12 @@ read -p "Você já mapeou as portas no P2M Manager? (y/n): "
 read -p "Você já configurou o certificado SSL? (y/n): "
 read -p "Você deseja atualizar e finalizar a instalação? (y/n): " resposta
 
-if [ $resposta = "y" ] || [ $resposta = "Y" ] || [ $resposta = "sim" ] || [ $resposta = "Sim" ]; then
+if [ "$resposta" = "y" ] || [ "$resposta" = "Y" ] || [ "$resposta" = "sim" ] || [ "$resposta" = "Sim" ]; then
     echo "O processo de atualização será inicializado"
 
 #read -p "Digite o nome do cliente: " name
 
-cd /www/wwwroot/$name/ || exit
+cd /www/wwwroot/"$name"/ || exit
 
 echo "Atualizando, aguarde..."
 
@@ -118,7 +118,7 @@ npm run build -ws
 cd backend || exit
 npx sequelize db:migrate
 
-pm2 restart $name-backend $name-frontend
+pm2 restart "$name"-backend "$name"-frontend
 
 echo "Atualizado!"
 
